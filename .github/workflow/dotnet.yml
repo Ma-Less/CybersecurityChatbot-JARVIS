@@ -1,19 +1,28 @@
-# JARVIS - Cybersecurity Awareness Chatbot - Part 1
+name: .NET Build and Test
 
-## Description
-**JARVIS (Just An Intelligent System)** is a console-based cybersecurity awareness chatbot for South African citizens. Provides tips on password safety, phishing scams, and safe browsing.
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
 
-## Features
-- Voice greeting on startup (WAV file)
-- ASCII art logo with JARVIS branding
-- Personalised greetings using user's name
-- Basic responses for cybersecurity topics
-- Input validation with helpful error messages
-- Coloured console UI with borders and dividers
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-## How to Run
-1. Open solution in Visual Studio 2022
-2. Ensure `greeting.wav` is in `Resources/` folder
-3. Press F5 to run
-
-## Sample Conversation
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+    
+    - name: Run tests (if any)
+      run: dotnet test --no-build --verbosity normal
